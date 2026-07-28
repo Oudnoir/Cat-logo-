@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo — Oud Noir</title>
+    <style>
+        :root {
+            --bg-dark: #0a0a0c;
+            --card-bg: #131317;
+            --gold-primary: #d4af37;
+            --gold-light: #f3e5ab;
+            --gold-muted: #8c733e;
+            --border-color: #242017;
+            --text-light: #f0f0f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            padding: 20px 15px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* HEADER ELEGANTE */
+        header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 0 25px 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
+        }
+
+        .logo-box img {
+            max-width: 130px;
+            height: auto;
+            object-fit: contain;
+            filter: drop-shadow(0px 4px 10px rgba(212, 175, 55, 0.15));
+            margin-bottom: 15px;
+        }
+
+        h1.catalog-title {
+            font-family: 'Georgia', serif;
+            font-size: 2.2rem;
+            color: var(--gold-primary);
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        .search-bar {
+            width: 100%;
+            max-width: 380px;
+            margin-top: 5px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 12px 20px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            color: var(--text-light);
+            outline: none;
+            text-align: center;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .search-bar input:focus {
+            border-color: var(--gold-primary);
+            box-shadow: 0 0 12px rgba(212, 175, 55, 0.25);
+        }
+
+        /* GRID Y TARJETAS */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .card:hover {
+            transform: translateY(-7px);
+            border-color: var(--gold-primary);
+            box-shadow: 0 12px 25px rgba(212, 175, 55, 0.15);
+        }
+
+        .img-box {
+            width: 100%;
+            height: 240px;
+            background: radial-gradient(circle, #221d12 0%, #110e08 70%, #0a0906 100%);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 1px solid var(--gold-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.8);
+            cursor: pointer;
+        }
+
+        .img-box img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover .img-box img {
+            transform: scale(1.06);
+        }
+
+        .product-name {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--gold-light);
+            margin-bottom: 4px;
+            line-height: 1.3;
+        }
+
+        .product-brand {
+            font-size: 0.8rem;
+            color: var(--gold-muted);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 15px;
+        }
+
+        .btn-price {
+            display: block;
+            background: linear-gradient(145deg, #1f1a10, #2a2213);
+            border: 1px solid var(--gold-primary);
+            color: var(--gold-primary);
+            font-weight: 600;
+            font-size: 0.85rem;
+            padding: 10px 15px;
+            border-radius: 25px;
+            text-decoration: none;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .card:hover .btn-price {
+            background: var(--gold-primary);
+            color: #000;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+        }
+
+        /* MODAL GESTUAL */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(5, 5, 5, 0.94);
+            backdrop-filter: blur(8px);
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            touch-action: none;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-img {
+            max-width: 90vw;
+            max-height: 85vh;
+            object-fit: contain;
+            cursor: grab;
+            border-radius: 8px;
+            user-select: none;
+            -webkit-user-drag: none;
+            will-change: transform;
+        }
+
+        .modal-img:active {
+            cursor: grabbing;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            color: var(--gold-primary);
+            font-size: 38px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1001;
+            line-height: 1;
+        }
+
+        footer {
+            margin-top: 60px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 25px;
+            text-align: center;
+            color: #555;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-box">
+            <img src="oud_noir_logo.png" alt="Oud Noir Logo">
+        </div>
+        <h1 class="catalog-title">Catálogo</h1>
+        <div class="search-bar">
+            <input type="text" id="searchInput" onkeyup="filterProducts()" placeholder="Buscar en el catálogo...">
+        </div>
+    </header>
+
+    <div class="grid" id="catalogGrid"></div>
+
+    <!-- MODAL VISOR -->
+    <div id="imageModal" class="modal" onclick="closeModal(event)">
+        <span class="close-btn" onclick="forceCloseModal()">&times;</span>
+        <img id="modalImage" class="modal-img" src="" alt="Vista previa">
+    </div>
+
+    <footer>
+        <p>&copy; Oud Noir</p>
+    </footer>
+
+    <script>
+        // NÚMERO DE WHATSAPP GLOBAL
+        const whatsappNumber = "50662279050";
+
+        // LISTA DE PRODUCTOS
+        const productos = [
+            { id: "9pm_afnan", nombre: "9PM", marca: "Afnan", imagen: "9pm_afnan.jpg" },
+            { id: "cloud_spray", nombre: "Cloud Body Spray", marca: "Ariana Grande", imagen: "Ariana_grande_Cloud_Spray.jpg" },
+            { id: "cloud_edp", nombre: "Cloud EDP", marca: "Ariana Grande", imagen: "Ariana_grande_Cloud_edp.jpg" },
+            { id: "club_nuit_intense", nombre: "Club de Nuit Intense", marca: "Armaf", imagen: "Club_de_nuit_intense.jpg" },
+            { id: "urban_man_elixir", nombre: "Urban Man Elixir", marca: "Armaf", imagen: "Club_de_nuit_urban_man_elixir.jpg" },
+            { id: "creed_aventus", nombre: "Aventus", marca: "Creed", imagen: "Creed_aventus.jpg" },
+            { id: "hawas_fire", nombre: "Hawas Fire", marca: "Rasasi", imagen: "Hawas_fire.jpg" },
+            { id: "hawas_ice", nombre: "Hawas Ice", marca: "Rasasi", imagen: "Hawas_ice.jpg" },
+            { id: "odyssey_aqua", nombre: "Odyssey Aqua", marca: "Armaf", imagen: "Odyssey_aqua.jpg" },
+            { id: "odyssey_candee", nombre: "Odyssey Candee", marca: "Armaf", imagen: "Odyssey_candee.jpg" },
+            { id: "odyssey_mega", nombre: "Odyssey Mega", marca: "Armaf", imagen: "Odyssey_mega.jpg" },
+            { id: "sauvage_elixir", nombre: "Sauvage Elixir", marca: "Dior", imagen: "Sauvage_Elixir.jpg" },
+            { id: "sauvage_parfum", nombre: "Sauvage Parfum", marca: "Dior", imagen: "Sauvage_parfum.jpg" },
+            { id: "stronger_with_you", nombre: "Stronger With You Intensely", marca: "Emporio Armani", imagen: "Stronger_with_you_intensely.jpg" },
+            { id: "thank_u_next_morado", nombre: "Thank U Next Morado", marca: "Ariana Grande", imagen: "Thank_u_next_spray_morado.jpg" },
+            { id: "thank_u_next_rosado", nombre: "Thank U Next Rosado", marca: "Ariana Grande", imagen: "Thank_u_next_spray_rosado.jpg" },
+            { id: "vintage_radio", nombre: "Vintage Radio", marca: "Lattafa", imagen: "Vintage_radio.jpg" },
+            { id: "yara_candy", nombre: "Yara Candy", marca: "Lattafa", imagen: "Yara_Candy.jpg" },
+            { id: "yara_rosada", nombre: "Yara Rosada", marca: "Lattafa", imagen: "Yara_rosada_lattafa.jpg" },
+            { id: "asad_lattafa", nombre: "Asad", marca: "Lattafa", imagen: "asad_lattafa.jpg" },
+            { id: "khamrah", nombre: "Khamrah", marca: "Lattafa", imagen: "lattafa_khamrah.jpg" },
+            { id: "khamrah_qahwa", nombre: "Khamrah Qahwa", marca: "Lattafa", imagen: "lattafa_qahwa.jpg" }
+        ];
+
+        // RENDERIZAR PRODUCTOS Y BOTONES DE WHATSAPP
+        function cargarProductos() {
+            const grid = document.getElementById('catalogGrid');
+            grid.innerHTML = productos.map(p => {
+                // Prepara el texto del mensaje para WhatsApp codificado para URL
+                const mensaje = encodeURIComponent(`Hola me interesó este perfume ${p.nombre}`);
+                const linkWhatsApp = `https://wa.me/${whatsappNumber}?text=${mensaje}`;
+
+                return `
+                    <div class="card">
+                        <div class="img-box" onclick="openModal('${p.imagen}')">
+                            <img src="${p.imagen}" alt="${p.nombre}">
+                        </div>
+                        <div>
+                            <div class="product-name">${p.nombre}</div>
+                            <div class="product-brand">${p.marca}</div>
+                        </div>
+                        <a href="${linkWhatsApp}" target="_blank" class="btn-price">Consultar</a>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        cargarProductos();
+
+        // FILTRO DE BÚSQUEDA
+        function filterProducts() {
+            let input = document.getElementById('searchInput').value.toLowerCase();
+            let cards = document.getElementsByClassName('card');
+
+            for (let i = 0; i < cards.length; i++) {
+                let name = cards[i].querySelector('.product-name').innerText.toLowerCase();
+                let brand = cards[i].querySelector('.product-brand').innerText.toLowerCase();
+                if (name.includes(input) || brand.includes(input)) {
+                    cards[i].style.display = "flex";
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+        }
+
+        // LÓGICA DE VISOR MODAL CON GESTOS Y ZOOM
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+
+        let scale = 1, posX = 0, posY = 0, startX = 0, startY = 0;
+        let isDragging = false, initialPinchDistance = null, lastTap = 0;
+
+        function openModal(imgSrc) {
+            modalImg.src = imgSrc;
+            modal.classList.add('active');
+            resetTransform();
+            document.body.style.overflow = 'hidden';
+        }
+
+        function forceCloseModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function closeModal(e) {
+            if (e.target === modal) forceCloseModal();
+        }
+
+        function resetTransform() {
+            scale = 1; posX = 0; posY = 0;
+            updateTransform();
+        }
+
+        function updateTransform() {
+            modalImg.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
+        }
+
+        modalImg.addEventListener('click', () => {
+            const currentTime = new Date().getTime();
+            const tapLength = currentTime - lastTap;
+            if (tapLength < 300 && tapLength > 0) {
+                if (scale > 1) resetTransform();
+                else { scale = 2.5; updateTransform(); }
+            }
+            lastTap = currentTime;
+        });
+
+        modal.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const delta = e.deltaY < 0 ? 0.25 : -0.25;
+            scale = Math.min(Math.max(1, scale + delta), 4);
+            if (scale === 1) { posX = 0; posY = 0; }
+            updateTransform();
+        }, { passive: false });
+
+        function handleStart(e) {
+            if (e.touches && e.touches.length === 2) {
+                initialPinchDistance = Math.hypot(
+                    e.touches[0].clientX - e.touches[1].clientX,
+                    e.touches[0].clientY - e.touches[1].clientY
+                );
+            } else if (scale > 1 || (e.touches && e.touches.length === 1)) {
+                isDragging = true;
+                const clientX = e.clientX || e.touches[0].clientX;
+                const clientY = e.clientY || e.touches[0].clientY;
+                startX = clientX - posX;
+                startY = clientY - posY;
+            }
+        }
+
+        function handleMove(e) {
+            if (e.touches && e.touches.length === 2 && initialPinchDistance) {
+                const currentDistance = Math.hypot(
+                    e.touches[0].clientX - e.touches[1].clientX,
+                    e.touches[0].clientY - e.touches[1].clientY
+                );
+                const factor = currentDistance / initialPinchDistance;
+                scale = Math.min(Math.max(1, scale * factor), 4);
+                initialPinchDistance = currentDistance;
+                if (scale === 1) { posX = 0; posY = 0; }
+                updateTransform();
+            } else if (isDragging && scale > 1) {
+                const clientX = e.clientX || e.touches[0].clientX;
+                const clientY = e.clientY || e.touches[0].clientY;
+                posX = clientX - startX;
+                posY = clientY - startY;
+                updateTransform();
+            }
+        }
+
+        function handleEnd() {
+            isDragging = false;
+            initialPinchDistance = null;
+        }
+
+        modalImg.addEventListener('mousedown', handleStart);
+        modalImg.addEventListener('touchstart', handleStart, { passive: true });
+        window.addEventListener('mousemove', handleMove);
+        window.addEventListener('touchmove', handleMove, { passive: true });
+        window.addEventListener('mouseup', handleEnd);
+        window.addEventListener('touchend', handleEnd);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') forceCloseModal();
+        });
+    </script>
+</body>
+</html>
